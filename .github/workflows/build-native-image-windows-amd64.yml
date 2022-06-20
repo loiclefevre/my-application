@@ -20,14 +20,23 @@ jobs:
       - name: Build with Maven
         run: mvn -DskipTests -B clean verify gluonfx:build --file pom.xml
         shell: powershell
-      - name: Run UPX
-        uses: crazy-max/ghaction-upx@v1.3.3
+#      - name: Run UPX
+#        uses: crazy-max/ghaction-upx@v1.3.3
+#        with:
+#          version: latest
+#          file: target/gluonfx/x86_64-windows/my-application.exe
+#          args: '-7'
+#      - uses: actions/upload-artifact@v3
+#        with:
+#          if-no-files-found: warn
+#          name: my-application
+#          path: target/gluonfx/x86_64-windows/*.exe
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          version: latest
-          file: target/gluonfx/x86_64-windows/my-application.exe
-          args: '-7'
-      - uses: actions/upload-artifact@v2
-        with:
-          if-no-files-found: warn
-          name: package
-          path: target/gluonfx/x86_64-windows/*.exe
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/gluonfx/x86_64-windows/*.exe
+          asset_name: my-application-windows-x86_64.zip
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: "My Application"
