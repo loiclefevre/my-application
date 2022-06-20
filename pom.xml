@@ -107,7 +107,7 @@
                         <list>com.mycompany.sample.main</list>
                     </bundlesList>
                     <reflectionList>
-                        <list>com.mycompany.sample.MainController</list>
+                        <list>com.mycompany.sample.MainPresenter</list>
                     </reflectionList>
                 </configuration>
             </plugin>

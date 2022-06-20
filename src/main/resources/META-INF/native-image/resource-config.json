@@ -1,0 +1,23 @@
+{
+  "resources":{
+  "includes":[{
+      "pattern":"\\Qgluonmobile.license\\E"
+    }]},
+  "bundles":[
+    {
+      "name":"com.mycompany.sample.main",
+      "locales":[""]
+    }, 
+    {
+      "name":"com.sun.javafx.tk.quantum.QuantumMessagesBundle",
+      "locales":[""]
+    }, 
+    {
+      "name":"com/sun/glass/ui/win/themes",
+      "locales":[
+        "", 
+        "en"
+      ]
+    }
+  ]
+}
