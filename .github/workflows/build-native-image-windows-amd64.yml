@@ -24,7 +24,7 @@ jobs:
         uses: crazy-max/ghaction-upx@v1.3.3
         with:
           version: latest
-          file: target/my-application.exe
+          file: target/gluonfx/x86_64-windows/my-application.exe
           args: '-7'
       - uses: actions/upload-artifact@v2
         with:
