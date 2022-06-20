@@ -35,8 +35,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/gluonfx/x86_64-windows/*.exe
-          asset_name: my-application-windows-x86_64.zip
+          file: target/gluonfx/x86_64-windows/my-application.exe
+          asset_name: my-application-windows-x86_64.exe
           tag: ${{ github.ref }}
           overwrite: true
           body: "My Application"
