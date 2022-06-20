@@ -30,4 +30,4 @@ jobs:
         with:
           if-no-files-found: warn
           name: package
-          path: target/*.exe
+          path: target/gluonfx/x86_64-windows/*.exe
