@@ -1,0 +1,33 @@
+name: GraalVM Native Image build
+on:
+  push:
+    branches: [ main ]
+    tags: [ '*' ]
+
+jobs:
+  buildOnWindows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ilammy/msvc-dev-cmd@v1.5.0
+      - uses: microsoft/setup-msbuild@v1
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: '22.1.0'
+          java-version: '11'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build with Maven
+        run: mvn -DskipTests -B clean verify gluonfx:build --file pom.xml
+        shell: powershell
+      - name: Run UPX
+        uses: crazy-max/ghaction-upx@v1.3.3
+        with:
+          version: latest
+          file: target/my-application.exe
+          args: '-7'
+      - uses: actions/upload-artifact@v2
+        with:
+          if-no-files-found: warn
+          name: package
+          path: target/*.exe

@@ -6,17 +6,24 @@
   "bundles":[
     {
       "name":"com.mycompany.sample.main",
-      "locales":[""]
+      "locales":[
+        "", 
+        "und"
+      ]
     }, 
     {
       "name":"com.sun.javafx.tk.quantum.QuantumMessagesBundle",
-      "locales":[""]
+      "locales":[
+        "", 
+        "und"
+      ]
     }, 
     {
       "name":"com/sun/glass/ui/win/themes",
       "locales":[
         "", 
-        "en"
+        "en", 
+        "und"
       ]
     }
   ]
