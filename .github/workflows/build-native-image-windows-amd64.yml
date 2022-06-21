@@ -59,12 +59,12 @@ jobs:
       - name: Build with Maven
         run: mvn -DskipTests -B clean verify gluonfx:build --file pom.xml
         shell: powershell
-            - name: Run UPX
-              uses: crazy-max/ghaction-upx@v1.3.3
-              with:
-                version: latest
-                file: target/gluonfx/x86_64-linux/my-application
-                args: '-7'
+      - name: Run UPX
+        uses: crazy-max/ghaction-upx@v1.3.3
+        with:
+          version: latest
+          file: target/gluonfx/x86_64-linux/my-application
+          args: '-7'
       - name: Extract Maven project version
         run: |
           "RELEASE_VERSION=$(mvn help:evaluate -Dexpression='project.version' -q -DforceStdout)" >> $env:GITHUB_ENV
