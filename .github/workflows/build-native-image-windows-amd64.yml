@@ -90,14 +90,14 @@ jobs:
           id: project
         - uses: actions/download-artifact@v3
           with:
-            path: my-application
-#      - name: Upload binaries to release
-#        uses: svenstaro/upload-release-action@v2
-#        with:
-#          repo_token: ${{ secrets.GITHUB_TOKEN }}
-#          file: target/gluonfx/x86_64-windows/my-application.exe
-#          asset_name: my-application-windows-x86_64.exe
-#          tag: ${{ env.RELEASE_VERSION }}
-#          release_name: My Application version ${{ env.RELEASE_VERSION }}
-#          overwrite: true
-#          body: "My Application"
+            path: torelease
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: torelease/my-application/*
+          file_glob: true
+          tag: ${{ env.RELEASE_VERSION }}
+          release_name: My Application version ${{ env.RELEASE_VERSION }}
+          overwrite: true
+          body: "My Application"
