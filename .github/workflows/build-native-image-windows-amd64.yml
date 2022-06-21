@@ -26,28 +26,51 @@ jobs:
 #          version: latest
 #          file: target/gluonfx/x86_64-windows/my-application.exe
 #          args: '-7'
-#      - uses: actions/upload-artifact@v3
-#        with:
-#          if-no-files-found: warn
-#          name: my-application
-#          path: target/gluonfx/x86_64-windows/*.exe
-      #- name: Set Release version env variable
-      #  run: echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
-      #  shell: powershell
       - name: Extract Maven project version
         run: Write-Output "RELEASE_VERSION=$(cmd /c mvn help:evaluate -Dexpression='project.version' -q -DforceStdout)" >> $env:GITHUB_ENV
         shell: powershell
         id: project
-      #- name: Show extracted Maven project version
-      #  run: Write-Output "${{ steps.project.outputs.version }}"
-      #  shell: powershell
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
+#      - name: Upload binaries to release
+#        uses: svenstaro/upload-release-action@v2
+#        with:
+#          repo_token: ${{ secrets.GITHUB_TOKEN }}
+#          file: target/gluonfx/x86_64-windows/my-application.exe
+#          asset_name: my-application-windows-x86_64.exe
+#          tag: ${{ env.RELEASE_VERSION }}
+#          release_name: My Application version ${{ env.RELEASE_VERSION }}
+#          overwrite: true
+#          body: "My Application"
+      - uses: actions/upload-artifact@v3
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/gluonfx/x86_64-windows/my-application.exe
-          asset_name: my-application-windows-x86_64.exe
-          tag: ${{ env.RELEASE_VERSION }}
-          release_name: My Application version ${{ env.RELEASE_VERSION }}
-          overwrite: true
-          body: "My Application"
+          if-no-files-found: warn
+          name: my-application-windows-x86_64
+          path: target/gluonfx/x86_64-windows/my-application.exe
+
+  buildOnLinux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: '22.1.0'
+          java-version: '11'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build with Maven
+        run: mvn -DskipTests -B clean verify gluonfx:build --file pom.xml
+        shell: powershell
+            - name: Run UPX
+              uses: crazy-max/ghaction-upx@v1.3.3
+              with:
+                version: latest
+                file: target/gluonfx/x86_64-linux/my-application
+                args: '-7'
+      - name: Extract Maven project version
+        run: |
+          "RELEASE_VERSION=$(mvn help:evaluate -Dexpression='project.version' -q -DforceStdout)" >> $env:GITHUB_ENV
+        id: project
+      - uses: actions/upload-artifact@v3
+        with:
+          if-no-files-found: warn
+          name: my-application-linux-x86_64
+          path: target/gluonfx/x86_64-linux/my-application
