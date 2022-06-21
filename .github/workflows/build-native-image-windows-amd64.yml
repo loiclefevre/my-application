@@ -10,13 +10,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ilammy/msvc-dev-cmd@v1.5.0
-      - uses: microsoft/setup-msbuild@v1
-      - uses: graalvm/setup-graalvm@v1
-        with:
-          version: '22.1.0'
-          java-version: '11'
-          components: 'native-image'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+      #- uses: microsoft/setup-msbuild@v1
+      #- uses: graalvm/setup-graalvm@v1
+      #  with:
+      #    version: '22.1.0'
+      #    java-version: '11'
+      #    components: 'native-image'
+      #    github-token: ${{ secrets.GITHUB_TOKEN }}
       #- name: Build with Maven
       #  run: mvn -DskipTests -B clean verify gluonfx:build --file pom.xml
       #  shell: powershell
@@ -35,7 +35,7 @@ jobs:
       #  run: echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
       #  shell: powershell
       - name: Extract Maven project version
-        run: echo ::set-output name=version::$(cmd /c mvn help:evaluate -Dexpression='project.version' -q -DforceStdout)
+        run: echo ::set-output version=$(cmd /c mvn help:evaluate -Dexpression='project.version' -q -DforceStdout)
         shell: powershell
         id: project
       - name: Show extracted Maven project version
