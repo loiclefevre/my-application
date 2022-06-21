@@ -47,6 +47,7 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: target/gluonfx/x86_64-windows/my-application.exe
           asset_name: my-application-windows-x86_64.exe
-          tag_name: ${{ env.RELEASE_VERSION }}
+          tag: ${{ env.RELEASE_VERSION }}
+          release_name: My Application version ${{ env.RELEASE_VERSION }}
           overwrite: true
           body: "My Application"
