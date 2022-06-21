@@ -74,10 +74,30 @@ jobs:
 
   releaseArtifacts:
       needs: [buildOnWindows, buildOnLinux]
-      runs-on: ubuntu-latest
+      runs-on: windows-latest
       steps:
         - uses: actions/checkout@v2
+        - uses: ilammy/msvc-dev-cmd@v1.5.0
+        - uses: microsoft/setup-msbuild@v1
+        - uses: graalvm/setup-graalvm@v1
+          with:
+            version: '22.1.0'
+            java-version: '11'
+            github-token: ${{ secrets.GITHUB_TOKEN }}
         - name: Extract Maven project version
-          run: |
-            "RELEASE_VERSION=$(mvn help:evaluate -Dexpression='project.version' -q -DforceStdout)" >> $env:GITHUB_ENV
+          run: Write-Output "RELEASE_VERSION=$(cmd /c mvn help:evaluate -Dexpression='project.version' -q -DforceStdout)" >> $env:GITHUB_ENV
+          shell: powershell
           id: project
+        - uses: actions/download-artifact@v3
+          with:
+            path: my-application
+#      - name: Upload binaries to release
+#        uses: svenstaro/upload-release-action@v2
+#        with:
+#          repo_token: ${{ secrets.GITHUB_TOKEN }}
+#          file: target/gluonfx/x86_64-windows/my-application.exe
+#          asset_name: my-application-windows-x86_64.exe
+#          tag: ${{ env.RELEASE_VERSION }}
+#          release_name: My Application version ${{ env.RELEASE_VERSION }}
+#          overwrite: true
+#          body: "My Application"
