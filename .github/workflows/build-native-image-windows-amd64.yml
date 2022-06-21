@@ -120,7 +120,7 @@ jobs:
           env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-              upload_url: ${{ needs.create_release.outputs.upload_url }}
+              upload_url: ${{ needs.createRelease.outputs.upload_url }}
               asset_name: my-application-${{ matrix.config.platform }}
               asset_path: ./torelease/my-application-${{ matrix.config.platform }}/my-application
               asset_content_type: application/octet-stream
