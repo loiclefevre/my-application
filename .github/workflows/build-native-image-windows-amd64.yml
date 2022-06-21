@@ -17,9 +17,9 @@ jobs:
           java-version: '11'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build with Maven
-        run: mvn -DskipTests -B clean verify gluonfx:build --file pom.xml
-        shell: powershell
+      #- name: Build with Maven
+      #  run: mvn -DskipTests -B clean verify gluonfx:build --file pom.xml
+      #  shell: powershell
 #      - name: Run UPX
 #        uses: crazy-max/ghaction-upx@v1.3.3
 #        with:
@@ -31,15 +31,20 @@ jobs:
 #          if-no-files-found: warn
 #          name: my-application
 #          path: target/gluonfx/x86_64-windows/*.exe
-      - name: Set Release version env variable
-        run: echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
-        shell: powershell
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/gluonfx/x86_64-windows/my-application.exe
-          asset_name: my-application-windows-x86_64.exe
-          tag_name: ${{ env.RELEASE_VERSION }}
-          overwrite: true
-          body: "My Application"
+      #- name: Set Release version env variable
+      #  run: echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+      #  shell: powershell
+      - name: Extract Maven project version
+        run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+        id: project
+      - name: Show extracted Maven project version
+        run: echo ${{ steps.project.outputs.version }}
+#      - name: Upload binaries to release
+#        uses: svenstaro/upload-release-action@v2
+#        with:
+#          repo_token: ${{ secrets.GITHUB_TOKEN }}
+#          file: target/gluonfx/x86_64-windows/my-application.exe
+#          asset_name: my-application-windows-x86_64.exe
+#          tag_name: ${{ env.RELEASE_VERSION }}
+#          overwrite: true
+#          body: "My Application"
