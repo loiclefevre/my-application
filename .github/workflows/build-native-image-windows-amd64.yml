@@ -117,9 +117,9 @@ jobs:
         - name: Upload release assets
           if: matrix.config.platform != 'windows-x86_64'
           uses: actions/upload-release-asset@v1
-            env:
+          env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            with:
+          with:
               upload_url: ${{ needs.create_release.outputs.upload_url }}
               asset_name: my-application-${{ matrix.config.platform }}
               asset_path: ./torelease/my-application-${{ matrix.config.platform }}/my-application
@@ -127,9 +127,9 @@ jobs:
         - name: Upload release assets
           if: matrix.config.platform == 'windows-x86_64'
           uses: actions/upload-release-asset@v1
-            env:
+          env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            with:
+          with:
               upload_url: ${{ needs.create_release.outputs.upload_url }}
               asset_name: my-application-${{ matrix.config.platform }}
               asset_path: ./torelease/my-application-${{ matrix.config.platform }}/my-application.exe
