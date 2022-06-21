@@ -36,9 +36,11 @@ jobs:
       #  shell: powershell
       - name: Extract Maven project version
         run: echo ::set-output name=version::$(cmd /c mvn help:evaluate -Dexpression='project.version' -q -DforceStdout)
+        shell: powershell
         id: project
       - name: Show extracted Maven project version
         run: echo ${{ steps.project.outputs.version }}
+        shell: powershell
 #      - name: Upload binaries to release
 #        uses: svenstaro/upload-release-action@v2
 #        with:
