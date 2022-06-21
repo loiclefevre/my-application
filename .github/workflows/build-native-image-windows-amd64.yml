@@ -72,9 +72,11 @@ jobs:
           name: my-application-linux-x86_64
           path: target/gluonfx/x86_64-linux/my-application
 
-  releaseArtifacts:
+  createRelease:
       needs: [buildOnWindows, buildOnLinux]
       runs-on: windows-latest
+      outputs:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
       steps:
         - uses: actions/checkout@v2
         - uses: ilammy/msvc-dev-cmd@v1.5.0
@@ -88,16 +90,63 @@ jobs:
           run: Write-Output "RELEASE_VERSION=$(cmd /c mvn help:evaluate -Dexpression='project.version' -q -DforceStdout)" >> $env:GITHUB_ENV
           shell: powershell
           id: project
+        - name: Create release
+          id: create_release
+          uses: actions/create-release@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            tag_name: ${{ env.RELEASE_VERSION }}
+            release_name: My Application version ${{ env.RELEASE_VERSION }}
+            draft: false
+            prerelease: false
+
+  releaseArtifacts:
+      needs: createRelease
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          config:
+                - platform: windows-x86_64
+                - platform: linux-x86_64
+      steps:
         - uses: actions/download-artifact@v3
           with:
+            name: my-application-${{ matrix.config.platform }}
             path: torelease
-        - name: Upload binaries to release
-          uses: svenstaro/upload-release-action@v2
-          with:
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
-            file: torelease/my-application/**/*
-            file_glob: true
-            tag: ${{ env.RELEASE_VERSION }}
-            release_name: My Application version ${{ env.RELEASE_VERSION }}
-            overwrite: true
-            body: "My Application"
+        - name: Upload release assets
+          if: matrix.config.platform != 'windows-x86_64'
+          uses: actions/upload-release-asset@v1
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            with:
+              upload_url: ${{ needs.create_release.outputs.upload_url }}
+              asset_name: my-application-${{ matrix.config.platform }}
+              asset_path: ./torelease/my-application-${{ matrix.config.platform }}/my-application
+              asset_content_type: application/octet-stream
+        - name: Upload release assets
+          if: matrix.config.platform == 'windows-x86_64'
+          uses: actions/upload-release-asset@v1
+            env:
+              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            with:
+              upload_url: ${{ needs.create_release.outputs.upload_url }}
+              asset_name: my-application-${{ matrix.config.platform }}
+              asset_path: ./torelease/my-application-${{ matrix.config.platform }}/my-application.exe
+              asset_content_type: application/octet-stream
+
+
+#        - uses: actions/download-artifact@v3
+#          with:
+#            path: torelease
+
+#        - name: Upload binaries to release
+#          uses: svenstaro/upload-release-action@v2
+#          with:
+#            repo_token: ${{ secrets.GITHUB_TOKEN }}
+#            file: torelease/my-application/**/*
+#            file_glob: true
+#            tag: ${{ env.RELEASE_VERSION }}
+#            release_name: My Application version ${{ env.RELEASE_VERSION }}
+#            overwrite: true
+#            body: "My Application"
