@@ -91,13 +91,13 @@ jobs:
         - uses: actions/download-artifact@v3
           with:
             path: torelease
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: torelease/my-application/*
-          file_glob: true
-          tag: ${{ env.RELEASE_VERSION }}
-          release_name: My Application version ${{ env.RELEASE_VERSION }}
-          overwrite: true
-          body: "My Application"
+        - name: Upload binaries to release
+          uses: svenstaro/upload-release-action@v2
+          with:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+            file: torelease/my-application/*
+            file_glob: true
+            tag: ${{ env.RELEASE_VERSION }}
+            release_name: My Application version ${{ env.RELEASE_VERSION }}
+            overwrite: true
+            body: "My Application"
