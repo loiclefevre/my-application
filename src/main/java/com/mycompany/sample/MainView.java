@@ -1,8 +1,9 @@
 package com.mycompany.sample;
 
-import com.gluonhq.charm.glisten.mvc.View;
 import java.util.ResourceBundle;
 import java.io.IOException;
+
+import com.mycompany.sample.javafx.View;
 import javafx.fxml.FXMLLoader;
 
 public class MainView {
@@ -12,7 +13,7 @@ public class MainView {
             View view = FXMLLoader.load(MainView.class.getResource("main.fxml"), ResourceBundle.getBundle("com.mycompany.sample.main"));
             return view;
         } catch (IOException e) {
-            System.out.println("IOException: " + e);
+            e.printStackTrace();
             return new View();
         }
     }

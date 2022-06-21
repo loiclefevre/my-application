@@ -1,11 +1,9 @@
 package com.mycompany.sample;
 
-import com.gluonhq.charm.glisten.application.AppManager;
-import com.gluonhq.charm.glisten.control.AppBar;
-import com.gluonhq.charm.glisten.mvc.View;
-import com.gluonhq.charm.glisten.visual.MaterialDesignIcon;
 import java.util.Random;
 import java.util.ResourceBundle;
+
+import com.mycompany.sample.javafx.View;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
@@ -29,9 +27,6 @@ public class MainPresenter {
     public void initialize() {
         main.showingProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue) {
-                AppBar appBar = AppManager.getInstance().getAppBar();
-                appBar.setNavIcon(MaterialDesignIcon.MENU.button(e -> AppManager.getInstance().getDrawer().open()));
-                appBar.setTitleText("My Application");
             }
         });
         label.setText(String.format(resources.getString("label.text"), "JavaFX", javafxVersion));
