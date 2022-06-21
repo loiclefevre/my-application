@@ -35,7 +35,7 @@ jobs:
       #  run: echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
       #  shell: powershell
       - name: Extract Maven project version
-        run: Write-Output "::set-output name=version::$(cmd /c mvn help:evaluate -Dexpression='project.version' -q -DforceStdout)"
+        run: Write-Output "RELEASE_VERSION=$(cmd /c mvn help:evaluate -Dexpression='project.version' -q -DforceStdout)" >> $env:GITHUB_ENV
         shell: powershell
         id: project
       #- name: Show extracted Maven project version
@@ -47,7 +47,6 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: target/gluonfx/x86_64-windows/my-application.exe
           asset_name: my-application-windows-x86_64.exe
-#          tag_name: ${{ env.RELEASE_VERSION }}
-          tag_name: ${{ steps.project.outputs.version }}
+          tag_name: ${{ env.RELEASE_VERSION }}
           overwrite: true
           body: "My Application"
