@@ -10,16 +10,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ilammy/msvc-dev-cmd@v1.5.0
-      #- uses: microsoft/setup-msbuild@v1
-      #- uses: graalvm/setup-graalvm@v1
-      #  with:
-      #    version: '22.1.0'
-      #    java-version: '11'
-      #    components: 'native-image'
-      #    github-token: ${{ secrets.GITHUB_TOKEN }}
-      #- name: Build with Maven
-      #  run: mvn -DskipTests -B clean verify gluonfx:build --file pom.xml
-      #  shell: powershell
+      - uses: microsoft/setup-msbuild@v1
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: '22.1.0'
+          java-version: '11'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build with Maven
+        run: mvn -DskipTests -B clean verify gluonfx:build --file pom.xml
+        shell: powershell
 #      - name: Run UPX
 #        uses: crazy-max/ghaction-upx@v1.3.3
 #        with:
@@ -38,15 +38,16 @@ jobs:
         run: Write-Output "::set-output name=version::$(cmd /c mvn help:evaluate -Dexpression='project.version' -q -DforceStdout)"
         shell: powershell
         id: project
-      - name: Show extracted Maven project version
-        run: Write-Output "${{ steps.project.outputs.version }}"
-        shell: powershell
-#      - name: Upload binaries to release
-#        uses: svenstaro/upload-release-action@v2
-#        with:
-#          repo_token: ${{ secrets.GITHUB_TOKEN }}
-#          file: target/gluonfx/x86_64-windows/my-application.exe
-#          asset_name: my-application-windows-x86_64.exe
+      #- name: Show extracted Maven project version
+      #  run: Write-Output "${{ steps.project.outputs.version }}"
+      #  shell: powershell
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/gluonfx/x86_64-windows/my-application.exe
+          asset_name: my-application-windows-x86_64.exe
 #          tag_name: ${{ env.RELEASE_VERSION }}
-#          overwrite: true
-#          body: "My Application"
+          tag_name: ${{ steps.project.outputs.version }}
+          overwrite: true
+          body: "My Application"
