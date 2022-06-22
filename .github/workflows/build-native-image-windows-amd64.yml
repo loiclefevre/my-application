@@ -135,7 +135,6 @@ jobs:
               asset_path: ./torelease/my-application.exe
               asset_content_type: application/octet-stream
 
-
 #        - uses: actions/download-artifact@v3
 #          with:
 #            path: torelease
