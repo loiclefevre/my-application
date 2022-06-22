@@ -131,7 +131,7 @@ jobs:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
               upload_url: ${{ needs.createRelease.outputs.upload_url }}
-              asset_name: my-application-${{ matrix.config.platform }}
+              asset_name: my-application-${{ matrix.config.platform }}.exe
               asset_path: ./torelease/my-application.exe
               asset_content_type: application/octet-stream
 
